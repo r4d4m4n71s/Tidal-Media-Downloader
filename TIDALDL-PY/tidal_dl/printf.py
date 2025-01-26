@@ -66,6 +66,8 @@ class Printf(object):
             ["-g or --gui",         "show simple-gui"],
             ["-o or --output",      "download path"],
             ["-l or --link",        "url/id/filePath"],
+            ["-t or --favTracks",   "download favorite tracks"],
+            ["-x or --favVideos",   "download favorite videos"],
             ["-q or --quality",     "track quality('Normal','High,'HiFi','Master')"],
             ["-r or --resolution",  "video resolution('P1080', 'P720', 'P480', 'P360')"]
         ])

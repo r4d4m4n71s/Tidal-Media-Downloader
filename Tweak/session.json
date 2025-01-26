@@ -1,8 +1,0 @@
-{
-    "token_type": "Bearer",
-    "access_token": "eyJraWQiOiJ2OU1GbFhqWSIsImFsZyI6IkVTMjU2In0.eyJ0eXBlIjoibzJfYWNjZXNzIiwidWlkIjoxOTczMTg4MTYsInNjb3BlIjoid19zdWIgcl91c3Igd191c3IiLCJnVmVyIjowLCJzVmVyIjowLCJjaWQiOjMyMzUsImV4cCI6MTczODMwNTY1MSwic2lkIjoiMTBiNDk4ODctNWQ5YS00ZDE3LWI5ZTktMDIzNDQwMjA2YjVkIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnRpZGFsLmNvbS92MSJ9.-diCxYkRsDZr_uTuLreL8VcSpBWJws72cW0ylfpHXAZ9IPDZ527COeaY9t4_XOx7vJGc18xsR6yxg_zGCOHe0A",
-    "refresh_token": "eyJraWQiOiJoUzFKYTdVMCIsImFsZyI6IkVTNTEyIn0.eyJ0eXBlIjoibzJfcmVmcmVzaCIsInVpZCI6MTk3MzE4ODE2LCJzY29wZSI6Indfc3ViIHJfdXNyIHdfdXNyIiwiY2lkIjozMjM1LCJzVmVyIjowLCJnVmVyIjowLCJpc3MiOiJodHRwczovL2F1dGgudGlkYWwuY29tL3YxIn0.AJ3ebYr4vUx73UwLu71ToOj6wTn4g2Wa4BWIvGpj66aJew-FHB3BhhhnOwVPWzJyz7zL4SwKgK0ZzraPQ07HeBjcADqRM5T5lp6EUMh4q3XszvoXpbUFFRS_KafbAWTio_UKFbGYSajkyEDxQtczP6Zt6it37b_aDZdI6lTHOTdbiuZT",
-    "expiry_time": 1738323651.014495,
-    "country_code": "CO",
-    "session_id": "10b49887-5d9a-4d17-b9e9-023440206b5d"
-}

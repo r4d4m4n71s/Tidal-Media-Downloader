@@ -16,16 +16,21 @@ from events import *
 from settings import *
 from gui import startGui
 from printf import Printf
+from Custom.TidalCustom import TidalFunctions
 
+# Configure logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
-def mainCommand():
-    try:
-        opts, args = getopt.getopt(sys.argv[1:],
-                                   "hvgl:o:q:r:",
-                                   ["help", "version", "gui", "link=", "output=", "quality", "resolution"])
-    except getopt.GetoptError as errmsg:
-        Printf.err(vars(errmsg)['msg'] + ". Use 'tidal-dl -h' for usage.")
-        return
+def mainCommand(opts = None):
+    
+    if opts is None:
+        try:
+            opts, args = getopt.getopt(sys.argv[1:], 
+                                    "hvgtxl:o:q:r:", 
+                                   ["help", "version", "gui", "link=", "output=", "quality", "resolution", "favTracks", "favVideos","Use"])
+        except getopt.GetoptError as errmsg:
+            Printf.err(vars(errmsg)['msg'] + ". Use 'tidal-dl -h' for usage.")
+            return
 
     link = None
     showGui = False
@@ -42,6 +47,12 @@ def mainCommand():
             continue
         if opt in ('-l', '--link'):
             link = val
+            continue
+        if opt in ('-t', '--favTracks'):
+            link = opt
+            continue
+        if opt in ('-x', '--favVideos'):
+            link = opt
             continue
         if opt in ('-o', '--output'):
             SETTINGS.downloadPath = val
@@ -67,6 +78,14 @@ def mainCommand():
     if link is not None:
         if not loginByConfig():
             loginByWeb()
+        
+        if link == "-t" or link is "--favTracks":
+            TidalFunctions().start_favorite_tracks()
+            return
+        if link == "-x" or link is "--favVideos":
+            #TidalFunctions().start_favorite_tracks()
+            return
+        
         Printf.info(LANG.select.SETTING_DOWNLOAD_PATH + ':' + SETTINGS.downloadPath)
         start(link)
 
@@ -123,7 +142,7 @@ def test():
         loginByWeb()
 
     SETTINGS.audioQuality = AudioQuality.Master
-    SETTINGS.videoFileFormat = VideoQuality.P240
+    SETTINGS.videoFileFormat = VideoQuality.P1080
     SETTINGS.checkExist = False
     SETTINGS.includeEP = True
     SETTINGS.saveCovers = True
@@ -155,7 +174,6 @@ def test():
     # start('98235845-13e8-43b4-94e2-d9f8e603cee7')
     # video 155608351 188932980 https://tidal.com/browse/track/55130637
     # start("155608351")https://tidal.com/browse/track/199683732
-
 
 if __name__ == '__main__':
     # test()

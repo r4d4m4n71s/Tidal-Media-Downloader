@@ -1,20 +1,10 @@
-#!/usr/bin/env python
-# -*- encoding: utf-8 -*-
-'''
-@File    :   download.py
-@Time    :   2020/11/08
-@Author  :   Yaronzz
-@Version :   1.0
-@Contact :   yaronhuang@foxmail.com
-@Desc    :
-'''
-
 from concurrent.futures import ThreadPoolExecutor
 
 from decryption import *
 from printf import *
 from tidal import *
-
+from aigpy import *
+from tagger import TrackTagger
 
 def __isSkip__(finalpath, url):
     if not SETTINGS.checkExist:
@@ -47,35 +37,42 @@ def __parseContributors__(roleType, Contributors):
     except:
         return None
 
-
 def __setMetaData__(track: Track, album: Album, filepath, contributors, lyrics):
-    obj = aigpy.tag.TagTool(filepath)
-    obj.album = track.album.title
-    obj.title = track.title
-    if not aigpy.string.isNull(track.version):
-        obj.title += ' (' + track.version + ')'
+    try:
+        # Create a TagBase object and populate it with metadata
+        metadata = {
+            "title": track.title,
+            "artist": list(map(lambda artist: artist.name, track.artists)),
+            "album": track.album.title,
+            "tracknumber": track.trackNumber,
+            "date": album.releaseDate,
+            "genre": "Pop",
+            "copyright": track.copyRight,
+            "discnumber": track.volumeNumber,
+            "composer": __parseContributors__('Composer', contributors),
+            "isrc": track.isrc,
+            "albumartist": list(map(lambda artist: artist.name, album.artists)),
+            "totaldisc": album.numberOfVolumes,
+            "lyrics": lyrics,
+        }
+        
+        # Path to the cover art image
+        cover_art_path = TIDAL_API.getCoverUrl(album.cover, "1280", "1280")
 
-    obj.artist = list(map(lambda artist: artist.name, track.artists))
-    obj.copyright = track.copyRight
-    obj.tracknumber = track.trackNumber
-    obj.discnumber = track.volumeNumber
-    obj.composer = __parseContributors__('Composer', contributors)
-    obj.isrc = track.isrc
-
-    obj.albumartist = list(map(lambda artist: artist.name, album.artists))
-    obj.date = album.releaseDate
-    obj.totaldisc = album.numberOfVolumes
-    obj.lyrics = lyrics
-    if obj.totaldisc <= 1:
-        obj.totaltrack = album.numberOfTracks
-    coverpath = TIDAL_API.getCoverUrl(album.cover, "1280", "1280")
-    obj.save(coverpath)
-
-
+        # Tag the file
+        tagger = TrackTagger(filepath)
+        tagger.tag_track(metadata, cover_art_path)
+        
+    except Exception as e:
+        raise Exception(f"Failed to tag {filepath}: {e}")
+    
 def downloadCover(album):
     if album is None:
         return
-    path = getAlbumPath(album) + '/cover.jpg'
+    path = os.path.join(getAlbumPath(album), 'cover.jpg')
+    if os.path.exists(path):
+        logging.info(f"Cover already exists at {path}")
+        return
     url = TIDAL_API.getCoverUrl(album.cover, "1280", "1280")
     aigpy.net.downloadFile(url, path)
 
@@ -138,9 +135,9 @@ def downloadVideo(video: Video, album: Album = None, playlist: Playlist = None):
         return False, str(e)
 
 
-def downloadTrack(track: Track, album=None, playlist=None, userProgress=None, partSize=1048576):
+def downloadTrack(track: Track, album=None, playlist=None, userProgress=None, partSize=1048576, audioQuality=SETTINGS.audioQuality):
     try:
-        stream = TIDAL_API.getStreamUrl(track.id, SETTINGS.audioQuality)
+        stream = TIDAL_API.getStreamUrl(track.id, audioQuality)
         path = getTrackPath(track, stream, album, playlist)
 
         if SETTINGS.showTrackInfo and not SETTINGS.multiThread:
@@ -155,7 +152,7 @@ def downloadTrack(track: Track, album=None, playlist=None, userProgress=None, pa
             return True, ''
 
         # download
-        logging.info("[DL Track] name=" + aigpy.path.getFileName(path) + "\nurl=" + stream.url)
+        logging.info("[DL Track] name=" + aigpy.path.getFileName(path))
 
         tool = aigpy.download.DownloadTool(path + '.part', stream.urls)
         tool.setUserProgress(userProgress)
@@ -184,6 +181,7 @@ def downloadTrack(track: Track, album=None, playlist=None, userProgress=None, pa
             lyrics = ''
 
         __setMetaData__(track, album, path, contributors, lyrics)
+
         Printf.success(track.title)
 
         return True, ''

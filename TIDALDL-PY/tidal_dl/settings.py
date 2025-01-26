@@ -31,6 +31,8 @@ class Settings(aigpy.model.ModelBase):
     downloadDelay = True
 
     downloadPath = "./download/"
+    sessionFilePath = "Session.json"
+
     audioQuality = AudioQuality.Normal
     videoQuality = VideoQuality.P360
     usePlaylistFolder = True
@@ -38,7 +40,11 @@ class Settings(aigpy.model.ModelBase):
     playlistFolderFormat = R"Playlist/{PlaylistName} [{PlaylistUUID}]"
     trackFileFormat = R"{TrackNumber} - {ArtistName} - {TrackTitle}{ExplicitFlag}"
     videoFileFormat = R"{VideoNumber} - {ArtistName} - {VideoTitle}{ExplicitFlag}"
-
+    
+    # Regex pattern constant to match {TrackTitle}{ExplicitFlag}-{ArtistName}-[{TrackID}-{AudioQuality}].fileExtension
+    trackFileFormat_regex = R"\[(\d+)-[^\]]+\]\.\w{3,4}$"
+    
+    
     def getDefaultPathFormat(self, type: Type):
         if type == Type.Album:
             return R"{ArtistName}/{Flag} {AlbumTitle} [{AlbumID}] [{AlbumYear}]"
@@ -66,6 +72,7 @@ class Settings(aigpy.model.ModelBase):
         self._path_ = path
         txt = aigpy.file.getContent(self._path_)
         if len(txt) > 0:
+            txt = txt.replace('\\', '\\\\')
             data = json.loads(txt)
             if aigpy.model.dictToModel(data, self) is None:
                 return
