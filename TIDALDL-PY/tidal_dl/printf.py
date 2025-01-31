@@ -6,21 +6,20 @@
 @Author  :   Yaronzz
 @Version :   3.0
 @Contact :   yaronhuang@foxmail.com
-@Desc    :
+@Desc    :   Print with colors and logging
 '''
-from pickle import GLOBAL
 import threading
 import aigpy
-import logging
 import prettytable
+from typing import List, Any, Optional
 
-import apiKey as apiKey
+import apiKey
 
 from model import *
 from paths import *
 from settings import *
 from lang.language import *
-
+from custom.logger import Logger, LoggerConfig, LogLevel
 
 VERSION = '2022.10.31.1'
 __LOGO__ = f'''
@@ -40,16 +39,23 @@ __LOGO__ = f'''
 
 print_mutex = threading.Lock()
 
-
 class Printf(object):
+    """Class for handling formatted console output and logging."""
+    
+    logger = Logger(LoggerConfig(
+        name="tidal-dl",
+        level=LogLevel.INFO
+    ).create())
 
     @staticmethod
-    def logo():
+    def logo() -> None:
+        """Print and log the application logo."""
         print(__LOGO__)
-        logging.info(__LOGO__)
+        Printf.logger.info(__LOGO__)
 
     @staticmethod
-    def __gettable__(columns, rows):
+    def __gettable__(columns: List[str], rows: List[List[Any]]) -> prettytable.PrettyTable:
+        """Create a formatted table with colored columns."""
         tb = prettytable.PrettyTable()
         tb.field_names = list(aigpy.cmd.green(item) for item in columns)
         tb.align = 'l'
@@ -58,7 +64,8 @@ class Printf(object):
         return tb
 
     @staticmethod
-    def usage():
+    def usage() -> None:
+        """Print usage information."""
         print("=============TIDAL-DL HELP==============")
         tb = Printf.__gettable__(["OPTION", "DESC"], [
             ["-h or --help",        "show help-message"],
@@ -72,7 +79,8 @@ class Printf(object):
         print(tb)
 
     @staticmethod
-    def checkVersion():
+    def checkVersion() -> None:
+        """Check for new version availability."""
         onlineVer = aigpy.pip.getLastVersion('tidal-dl')
         if onlineVer is not None:
             icmp = aigpy.system.cmpVersion(onlineVer, VERSION)
@@ -80,7 +88,8 @@ class Printf(object):
                 Printf.info(LANG.select.PRINT_LATEST_VERSION + ' ' + onlineVer)
 
     @staticmethod
-    def settings():
+    def settings() -> None:
+        """Print current settings."""
         data = SETTINGS
         tb = Printf.__gettable__([LANG.select.SETTING, LANG.select.VALUE], [
             #settings - path and format
@@ -111,9 +120,11 @@ class Printf(object):
             [LANG.select.SETTING_DOWNLOAD_DELAY, data.downloadDelay],
         ])
         print(tb)
+        Printf.logger.debug("Settings displayed")
 
     @staticmethod
-    def choices():
+    def choices() -> None:
+        """Print available choices."""
         print("====================================================")
         tb = Printf.__gettable__([LANG.select.CHOICE, LANG.select.FUNCTION], [
             [aigpy.cmd.green(LANG.select.CHOICE_ENTER + " '0':"), LANG.select.CHOICE_EXIT],
@@ -131,41 +142,44 @@ class Printf(object):
         print("====================================================")
 
     @staticmethod
-    def enter(string):
+    def enter(string: str) -> str:
+        """Get user input with colored prompt."""
         aigpy.cmd.colorPrint(string, aigpy.cmd.TextColor.Yellow, None)
-        ret = input("")
-        return ret
+        return input("")
 
     @staticmethod
-    def enterBool(string):
+    def enterBool(string: str) -> bool:
+        """Get boolean user input."""
         aigpy.cmd.colorPrint(string, aigpy.cmd.TextColor.Yellow, None)
-        ret = input("")
-        return ret == '1'
+        return input("") == '1'
 
     @staticmethod
-    def enterPath(string, errmsg, retWord='0', default=""):
+    def enterPath(string: str, errmsg: str, retWord: str = '0', default: str = "") -> str:
+        """Get path input from user with validation."""
         while True:
             ret = aigpy.cmd.inputPath(aigpy.cmd.yellow(string), retWord)
             if ret == retWord:
                 return default
             elif ret == "":
-                print(aigpy.cmd.red(LANG.select.PRINT_ERR + " ") + errmsg)
+                Printf.err(errmsg)
             else:
                 break
         return ret
 
     @staticmethod
-    def enterLimit(string, errmsg, limit=[]):
+    def enterLimit(string: str, errmsg: str, limit: List[str] = []) -> Optional[str]:
+        """Get limited choice input from user."""
         while True:
             ret = aigpy.cmd.inputLimit(aigpy.cmd.yellow(string), limit)
             if ret is None:
-                print(aigpy.cmd.red(LANG.select.PRINT_ERR + " ") + errmsg)
+                Printf.err(errmsg)
             else:
                 break
         return ret
 
     @staticmethod
-    def enterFormat(string, current, default):
+    def enterFormat(string: str, current: str, default: str) -> str:
+        """Get format input from user."""
         ret = Printf.enter(string)
         if ret == '0' or aigpy.string.isNull(ret):
             return current
@@ -174,29 +188,29 @@ class Printf(object):
         return ret
 
     @staticmethod
-    def err(string):
-        global print_mutex
-        print_mutex.acquire()
-        print(aigpy.cmd.red(LANG.select.PRINT_ERR + " ") + string)
-        # logging.error(string)
-        print_mutex.release()
+    def err(string: str) -> None:
+        """Print and log error message."""
+        with print_mutex:
+            print(aigpy.cmd.red(LANG.select.PRINT_ERR + " ") + string)
+            Printf.logger.error(string)
 
     @staticmethod
-    def info(string):
-        global print_mutex
-        print_mutex.acquire()
-        print(aigpy.cmd.blue(LANG.select.PRINT_INFO + " ") + string)
-        print_mutex.release()
+    def info(string: str) -> None:
+        """Print and log info message."""
+        with print_mutex:
+            print(aigpy.cmd.blue(LANG.select.PRINT_INFO + " ") + string)
+            Printf.logger.info(string)
 
     @staticmethod
-    def success(string):
-        global print_mutex
-        print_mutex.acquire()
-        print(aigpy.cmd.green(LANG.select.PRINT_SUCCESS + " ") + string)
-        print_mutex.release()
+    def success(string: str) -> None:
+        """Print and log success message."""
+        with print_mutex:
+            print(aigpy.cmd.green(LANG.select.PRINT_SUCCESS + " ") + string)
+            Printf.logger.info(string)
 
     @staticmethod
-    def album(data: Album):
+    def album(data: Album) -> None:
+        """Print and log album information."""
         tb = Printf.__gettable__([LANG.select.MODEL_ALBUM_PROPERTY, LANG.select.VALUE], [
             [LANG.select.MODEL_TITLE, data.title],
             ["ID", data.id],
@@ -207,14 +221,11 @@ class Printf(object):
             [LANG.select.MODEL_EXPLICIT, data.explicit],
         ])
         print(tb)
-        logging.info("====album " + str(data.id) + "====\n" +
-                     "title:" + data.title + "\n" +
-                     "track num:" + str(data.numberOfTracks) + "\n" +
-                     "video num:" + str(data.numberOfVideos) + "\n" +
-                     "==================================")
+        Printf.logger.info(f"Album: {data.title} (ID: {data.id}) - {data.numberOfTracks} tracks, {data.numberOfVideos} videos")
 
     @staticmethod
-    def track(data: Track, stream: StreamUrl = None):
+    def track(data: Track, stream: Optional[StreamUrl] = None) -> None:
+        """Print and log track information."""
         tb = Printf.__gettable__([LANG.select.MODEL_TRACK_PROPERTY, LANG.select.VALUE], [
             [LANG.select.MODEL_TITLE, data.title],
             ["ID", data.id],
@@ -227,16 +238,14 @@ class Printf(object):
             tb.add_row(["Get-Q", str(stream.soundQuality)])
             tb.add_row(["Get-Codec", str(stream.codec)])
         print(tb)
-        logging.info("====track " + str(data.id) + "====\n" + \
-                     "title:" + data.title + "\n" + \
-                     "version:" + str(data.version) + "\n" + \
-                     "==================================")
+        Printf.logger.info(f"Track: {data.title} (ID: {data.id}) - Album: {data.album.title}")
 
     @staticmethod
-    def video(data: Video, stream: VideoStreamUrl = None):
+    def video(data: Video, stream: Optional[VideoStreamUrl] = None) -> None:
+        """Print and log video information."""
         tb = Printf.__gettable__([LANG.select.MODEL_VIDEO_PROPERTY, LANG.select.VALUE], [
             [LANG.select.MODEL_TITLE, data.title],
-            [LANG.select.MODEL_ALBUM, data.album.title if data.album != None else None],
+            [LANG.select.MODEL_ALBUM, data.album.title if data.album is not None else None],
             [LANG.select.MODEL_VERSION, data.version],
             [LANG.select.MODEL_EXPLICIT, data.explicit],
             ["Max-Q", data.quality],
@@ -245,13 +254,11 @@ class Printf(object):
             tb.add_row(["Get-Q", str(stream.resolution)])
             tb.add_row(["Get-Codec", str(stream.codec)])
         print(tb)
-        logging.info("====video " + str(data.id) + "====\n" +
-                     "title:" + data.title + "\n" +
-                     "version:" + str(data.version) + "\n" +
-                     "==================================")
+        Printf.logger.info(f"Video: {data.title} (ID: {data.id})")
 
     @staticmethod
-    def artist(data: Artist, num):
+    def artist(data: Artist, num: int) -> None:
+        """Print and log artist information."""
         tb = Printf.__gettable__([LANG.select.MODEL_ARTIST_PROPERTY, LANG.select.VALUE], [
             [LANG.select.MODEL_ID, data.id],
             [LANG.select.MODEL_NAME, data.name],
@@ -259,51 +266,45 @@ class Printf(object):
             [LANG.select.MODEL_TYPE, str(data.type)],
         ])
         print(tb)
-        logging.info("====artist " + str(data.id) + "====\n" +
-                     "name:" + data.name + "\n" +
-                     "album num:" + str(num) + "\n" +
-                     "==================================")
+        Printf.logger.info(f"Artist: {data.name} (ID: {data.id}) - {num} albums")
 
     @staticmethod
-    def playlist(data):
+    def playlist(data: Any) -> None:
+        """Print and log playlist information."""
         tb = Printf.__gettable__([LANG.select.MODEL_PLAYLIST_PROPERTY, LANG.select.VALUE], [
             [LANG.select.MODEL_TITLE, data.title],
             [LANG.select.MODEL_TRACK_NUMBER, data.numberOfTracks],
             [LANG.select.MODEL_VIDEO_NUMBER, data.numberOfVideos],
         ])
         print(tb)
-        logging.info("====playlist " + str(data.uuid) + "====\n" +
-                     "title:" + data.title + "\n" +
-                     "track num:" + str(data.numberOfTracks) + "\n" +
-                     "video num:" + str(data.numberOfVideos) + "\n" +
-                     "==================================")
+        Printf.logger.info(f"Playlist: {data.title} - {data.numberOfTracks} tracks, {data.numberOfVideos} videos")
 
     @staticmethod
-    def mix(data):
+    def mix(data: Any) -> None:
+        """Print and log mix information."""
         tb = Printf.__gettable__([LANG.select.MODEL_PLAYLIST_PROPERTY, LANG.select.VALUE], [
             [LANG.select.MODEL_ID, data.id],
             [LANG.select.MODEL_TRACK_NUMBER, len(data.tracks)],
             [LANG.select.MODEL_VIDEO_NUMBER, len(data.videos)],
         ])
         print(tb)
-        logging.info("====Mix " + str(data.id) + "====\n" +
-                     "track num:" + str(len(data.tracks)) + "\n" +
-                     "video num:" + str(len(data.videos)) + "\n" +
-                     "==================================")
+        Printf.logger.info(f"Mix (ID: {data.id}) - {len(data.tracks)} tracks, {len(data.videos)} videos")
 
     @staticmethod
-    def apikeys(items):
+    def apikeys(items: List[dict]) -> None:
+        """Print API keys information."""
         print("-------------API-KEYS---------------")
         tb = prettytable.PrettyTable()
         tb.field_names = [aigpy.cmd.green('Index'),
-                          aigpy.cmd.green('Valid'),
-                          aigpy.cmd.green('Platform'),
-                          aigpy.cmd.green('Formats'), ]
+                         aigpy.cmd.green('Valid'),
+                         aigpy.cmd.green('Platform'),
+                         aigpy.cmd.green('Formats'), ]
         tb.align = 'l'
 
         for index, item in enumerate(items):
             tb.add_row([str(index),
-                        aigpy.cmd.green('True') if item["valid"] == "True" else aigpy.cmd.red('False'),
-                        item["platform"],
-                        item["formats"]])
+                       aigpy.cmd.green('True') if item["valid"] == "True" else aigpy.cmd.red('False'),
+                       item["platform"],
+                       item["formats"]])
         print(tb)
+        Printf.logger.debug("API keys displayed")

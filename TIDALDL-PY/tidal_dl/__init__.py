@@ -17,7 +17,6 @@ from settings import *
 from gui import startGui
 from printf import Printf
 
-
 def mainCommand():
     try:
         opts, args = getopt.getopt(sys.argv[1:],

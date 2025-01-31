@@ -6,9 +6,10 @@ setup(
     version=VERSION,
     license="Apache2",
     description="Tidal Music Downloader.",
-
-    author='YaronH',
-    author_email="yaronhuang@foxmail.com",
+    long_description=open('README.md', 'r', encoding='utf-8').read(),
+    long_description_content_type="text/markdown",
+    author='r4d4m4n71s',
+    author_email="r4d4m4n71s@foxmail.com",
 
     packages=find_packages(exclude=['tidal_gui*']),
     include_package_data=False,

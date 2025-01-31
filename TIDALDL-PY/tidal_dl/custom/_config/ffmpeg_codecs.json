@@ -1,0 +1,32 @@
+{
+	"wav": {
+		"codec": "pcm_s16le",
+		"description": "16-bit PCM (most common for WAV)",
+		"ext": ".wav"
+	},
+	"mp3": {
+		"codec": "libmp3lame",
+		"description": "MP3 audio codec",
+		"ext": ".mp3"
+	},
+	"aac": {
+		"codec": "aac",
+		"description": "Native FFmpeg AAC encoder",
+		"ext": ".aac"
+	},
+	"flac": {
+		"codec": "flac",
+		"description": "Free Lossless Audio Codec",
+		"ext": ".flac"
+	},
+	"mp4": {
+		"codec": "aac",
+		"description": "AAC audio in MP4 container",
+		"ext": ".m4a"
+	},
+	"libfdk_aac": {
+		"codec": "libfdk_aac",
+		"description": "Higher quality AAC encoder (requires FFmpeg compiled with libfdk_aac support)",
+		"ext": ".m4a"
+	}
+}

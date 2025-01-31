@@ -46,6 +46,8 @@ pip3 install tidal-dl --upgrade
 | tidal-dl                                              | Show interactive interface |
 | tidal-dl -h                                           | Show help-message          |
 | tidal-dl -l "https://tidal.com/browse/track/70973230" | Download link              |
+| tidal-dl -f                                           | Download favorite tracks   |
+| tidal-dl -v                                           | Download favorite videos   |
 | tidal-dl -g                                           | Show simple-gui            |
 
 If you are using windows system, you can use [tidal-pro](https://github.com/yaronzz/Tidal-Media-Downloader-PRO)

@@ -1,0 +1,126 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Install Dependencies",
+            "type": "shell",
+            "command": "pip install -r requirements.txt",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Install Ruff",
+            "type": "shell",
+            "command": "pip install ruff",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            }
+        },
+        {
+            "label": "Export PYTHONPATH",
+            "type": "shell",
+            "command": "echo",
+            "args": [],
+            "options": {
+                "env": {
+                    "PYTHONPATH": "${workspaceFolder}/TIDALDL-PY/tidal_dl:${workspaceFolder}/TIDALDL-PY/tidal_dl/custom"
+                }
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "shared"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        }
+        // {
+        //     "label": "Install Requirements",
+        //     "type": "shell",
+        //     "command": "${workspaceFolder}/.venv/Scripts/pip.exe",
+        //     "args": [
+        //         "install",
+        //         "-r",
+        //         "${workspaceFolder}/requirements.txt"
+        //     ],
+        //     "group": {
+        //         "kind": "build",
+        //         "isDefault": true
+        //     },
+        //     "problemMatcher": []
+        // },
+        {
+            "label": "Install Tidal GUI",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "setup-gui.py",
+                "install"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Tidal GUI",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "setup-gui.py",
+                "run"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },{
+            "label": "Create Virtual Environment",
+            "type": "shell",
+            "command": "python",
+            "args": [
+                "-m",
+                "venv",
+                ".venv"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Activate Virtual Environment",
+            "type": "shell",
+            "command": "${workspaceFolder}/.venv/Scripts/activate",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": true,
+                "panel": "new"
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": false
+            },
+            "problemMatcher": []
+        }
+    ]
+}

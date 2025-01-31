@@ -1,0 +1,226 @@
+{
+    "mp3_tags": {
+        "title": {
+            "description": "The title of the track.",
+            "mutagen_frame": "mutagen.id3.TIT2",
+            "tag_key": "title"
+        },
+        "artist": {
+            "description": "The artist or performer of the track.",
+            "mutagen_frame": "mutagen.id3.TPE1",
+            "tag_key": "artist"
+        },
+        "album": {
+            "description": "The album name.",
+            "mutagen_frame": "mutagen.id3.TALB",
+            "tag_key": "album"
+        },
+        "tracknumber": {
+            "description": "The track number (e.g., '1/12' for track 1 of 12).",
+            "mutagen_frame": "mutagen.id3.TRCK",
+            "tag_key": "tracknumber"
+        },
+        "discnumber": {
+            "description": "The disc number (e.g., '1/2' for disc 1 of 2).",
+            "mutagen_frame": "mutagen.id3.TPOS",
+            "tag_key": "discnumber"
+        },
+        "genre": {
+            "description": "The genre of the track (e.g., 'Pop', 'Rock').",
+            "mutagen_frame": "mutagen.id3.TCON",
+            "tag_key": "genre"
+        },
+        "date": {
+            "description": "The release date (e.g., '2022-05-06').",
+            "mutagen_frame": "mutagen.id3.TDRC",
+            "tag_key": "date"
+        },
+        "composer": {
+            "description": "The composer of the track.",
+            "mutagen_frame": "mutagen.id3.TCOM",
+            "tag_key": "composer"
+        },
+        "copyright": {
+            "description": "Copyright information (e.g., '(P) 2022 Rimas Entertainment').",
+            "mutagen_frame": "mutagen.id3.TCOP",
+            "tag_key": "copyright"
+        },
+        "isrc": {
+            "description": "International Standard Recording Code (ISRC).",
+            "mutagen_frame": "mutagen.id3.TSRC",
+            "tag_key": "isrc"
+        },
+        "lyrics": {
+            "description": "Lyrics or text synchronized with the audio.",
+            "mutagen_frame": "mutagen.id3.USLT",
+            "tag_key": "lyrics"
+        },
+        "albumartist": {
+            "description": "The artist of the entire album (if different from the track artist).",
+            "mutagen_frame": "mutagen.id3.TPE2",
+            "tag_key": "albumartist"
+        },
+        "bpm": {
+            "description": "Beats per minute (BPM) of the track.",
+            "mutagen_frame": "mutagen.id3.TBPM",
+            "tag_key": "bpm"
+        },
+        "encodedby": {
+            "description": "The name of the person or software that encoded the file.",
+            "mutagen_frame": "mutagen.id3.TENC",
+            "tag_key": "encodedby"
+        },
+        "language": {
+            "description": "The language of the lyrics or text.",
+            "mutagen_frame": "mutagen.id3.TLAN",
+            "tag_key": "language"
+        },
+        "publisher": {
+            "description": "The publisher of the track.",
+            "mutagen_frame": "mutagen.id3.TPUB",
+            "tag_key": "publisher"
+        },
+        "conductor": {
+            "description": "The conductor of the performance.",
+            "mutagen_frame": "mutagen.id3.TPE3",
+            "tag_key": "conductor"
+        },
+        "originalartist": {
+            "description": "The original artist of the track (if it’s a cover or remix).",
+            "mutagen_frame": "mutagen.id3.TOPE",
+            "tag_key": "originalartist"
+        },
+        "fileowner": {
+            "description": "The owner or licensee of the file.",
+            "mutagen_frame": "mutagen.id3.TOWN",
+            "tag_key": "fileowner"
+        },
+        "url": {
+            "description": "A URL associated with the track (e.g., artist website).",
+            "mutagen_frame": "mutagen.id3.WXXX",
+            "tag_key": "url"
+        },
+        "comment": {
+            "description": "A comment or description.",
+            "mutagen_frame": "mutagen.id3.COMM",
+            "tag_key": "comment"
+        },
+        "custom_tag": {
+            "description": "A custom tag for MP3 files.",
+            "mutagen_frame": "mutagen.id3.USLT",
+            "tag_key": "custom_tag"
+        }
+    },
+    "mp4_tags": {
+        "title": {
+            "description": "The title of the track.",
+            "mutagen_key": "\\xa9nam",
+            "tag_key": "title"
+        },
+        "artist": {
+            "description": "The artist or performer of the track.",
+            "mutagen_key": "\\xa9ART",
+            "tag_key": "artist"
+        },
+        "album": {
+            "description": "The album name.",
+            "mutagen_key": "\\xa9alb",
+            "tag_key": "album"
+        },
+        "tracknumber": {
+            "description": "The track number (e.g., '(1, 12)' for track 1 of 12).",
+            "mutagen_key": "trkn",
+            "tag_key": "tracknumber"
+        },
+        "discnumber": {
+            "description": "The disc number (e.g., '(1, 2)' for disc 1 of 2).",
+            "mutagen_key": "disk",
+            "tag_key": "discnumber"
+        },
+        "genre": {
+            "description": "The genre of the track (e.g., 'Pop', 'Rock').",
+            "mutagen_key": "\\xa9gen",
+            "tag_key": "genre"
+        },
+        "date": {
+            "description": "The release date (e.g., '2022-05-06').",
+            "mutagen_key": "\\xa9day",
+            "tag_key": "date"
+        },
+        "composer": {
+            "description": "The composer of the track.",
+            "mutagen_key": "\\xa9wrt",
+            "tag_key": "composer"
+        },
+        "copyright": {
+            "description": "Copyright information (e.g., '(P) 2022 Rimas Entertainment').",
+            "mutagen_key": "cprt",
+            "tag_key": "copyright"
+        },
+        "isrc": {
+            "description": "International Standard Recording Code (ISRC).",
+            "mutagen_key": "----:com.apple.iTunes:ISRC",
+            "tag_key": "isrc"
+        },
+        "lyrics": {
+            "description": "Lyrics or text synchronized with the audio.",
+            "mutagen_key": "\\xa9lyr",
+            "tag_key": "lyrics"
+        },
+        "albumartist": {
+            "description": "The artist of the entire album (if different from the track artist).",
+            "mutagen_key": "aART",
+            "tag_key": "albumartist"
+        },
+        "bpm": {
+            "description": "Beats per minute (BPM) of the track.",
+            "mutagen_key": "tmpo",
+            "tag_key": "bpm"
+        },
+        "encodedby": {
+            "description": "The name of the person or software that encoded the file.",
+            "mutagen_key": "\\xa9too",
+            "tag_key": "encodedby"
+        },
+        "language": {
+            "description": "The language of the lyrics or text.",
+            "mutagen_key": "----:com.apple.iTunes:LANGUAGE",
+            "tag_key": "language"
+        },
+        "publisher": {
+            "description": "The publisher of the track.",
+            "mutagen_key": "\\xa9pub",
+            "tag_key": "publisher"
+        },
+        "conductor": {
+            "description": "The conductor of the performance.",
+            "mutagen_key": "----:com.apple.iTunes:CONDUCTOR",
+            "tag_key": "conductor"
+        },
+        "originalartist": {
+            "description": "The original artist of the track (if it’s a cover or remix).",
+            "mutagen_key": "----:com.apple.iTunes:ORIGINAL ARTIST",
+            "tag_key": "originalartist"
+        },
+        "fileowner": {
+            "description": "The owner or licensee of the file.",
+            "mutagen_key": "ownr",
+            "tag_key": "fileowner"
+        },
+        "url": {
+            "description": "A URL associated with the track (e.g., artist website).",
+            "mutagen_key": "----:com.apple.iTunes:URL",
+            "tag_key": "url"
+        },
+        "comment": {
+            "description": "A comment or description.",
+            "mutagen_key": "\\xa9cmt",
+            "tag_key": "comment"
+        },
+        "custom_tag": {
+            "description": "A custom tag for MP4 files.",
+            "mutagen_key": "----:com.apple.iTunes:CUSTOM_TAG",
+            "tag_key": "custom_tag"
+        }
+    }
+}
